@@ -63,7 +63,7 @@ class Seq2SeqCollator(object):
 
         inputs = self.tokenizer(
             sources,
-            max_length=512,
+            max_length=40,
             return_tensors='pt',
             padding=True,
             truncation=True
