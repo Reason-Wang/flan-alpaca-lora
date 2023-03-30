@@ -2,6 +2,12 @@
 
 This repo trains *google/flan-t5* on alpaca dataset with low-rank adaptation training method. It reduces the GPU memory needed and speeds the training.
 
+| model                  | adapter_params | GPU  | time   |
+| ---------------------- | -------------- | ---- | ------ |
+| [flan-alpaca-lora-base](https://huggingface.co/reasonwang/flan-alpaca-lora-base)  | 0.8M           | 3090 | 20mins |
+| [flan-alpaca-lora-large](https://huggingface.co/reasonwang/flan-alpaca-lora-large) | 2.3M           | 3090 | 50mins |
+| [flan-alpaca-lora-xl](https://huggingface.co/reasonwang/flan-alpaca-lora-xl)   | 4.96M          | 3090 | 2.5hrs |
+
 #### Dependcies
 
 ```
@@ -9,8 +15,6 @@ torch == 1.13.1
 transformers == 4.27.1
 peft == 0.2.0
 ```
-
-
 
 #### Training
 
