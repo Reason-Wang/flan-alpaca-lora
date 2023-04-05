@@ -2,6 +2,8 @@
 
 This repo trains *google/flan-t5* on alpaca dataset with low-rank adaptation training method. It reduces the GPU memory needed and speeds the training.
 
+Update: we trained flan-t5-xxl using 8bit quantization. The model can be fitted into a single 3090 GPU. All of the models can be found in huggingface.
+
 | model                                                        | adapter_params | GPU  | time   |
 | ------------------------------------------------------------ | -------------- | ---- | ------ |
 | [flan-alpaca-lora-base](https://huggingface.co/reasonwang/flan-alpaca-lora-base) | 0.9M           | 3090 | 20mins |
@@ -22,14 +24,13 @@ peft == 0.2.0
 The following command finetune Flan-T5-base with only 20 mins on a single 3090 GPU
 
 ```bash
-torchrun --nproc_per_node=1 --master_port=29500 train.py \
+python train.py \
     --model_name_or_path google/flan-t5-base \
     --data_path ./alpaca_data_cleaned.json \
     --bf16 True \
     --output_dir ./ckpts/ \
     --num_train_epochs 3 \
     --per_device_train_batch_size 8 \
-    --per_device_eval_batch_size 4 \
     --gradient_accumulation_steps 8 \
     --evaluation_strategy "no" \
     --save_strategy "no" \
@@ -59,4 +60,3 @@ outputs = peft_model.generate(**inputs, max_length=128, do_sample=True)
 print(tokenizer.batch_decode(outputs, skip_special_tokens=True))
 ```
 
-We are still improving the repo...
