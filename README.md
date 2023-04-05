@@ -9,7 +9,7 @@ Update: we trained flan-t5-xxl using 8bit quantization. The model can be fitted 
 | [flan-alpaca-lora-base](https://huggingface.co/reasonwang/flan-alpaca-lora-base) | 0.9M           | 3090 | 20mins |
 | [flan-alpaca-lora-large](https://huggingface.co/reasonwang/flan-alpaca-lora-large) | 2.4M           | 3090 | 50mins |
 | [flan-alpaca-lora-xl](https://huggingface.co/reasonwang/flan-alpaca-lora-xl) | 4.7M           | 3090 | 2.5hrs |
-| [flan-alpaca-lora-xxl]([reasonwang/flan-alpaca-lora-xxl · Hugging Face](https://huggingface.co/reasonwang/flan-alpaca-lora-xxl)) | 9.4M           | 3090 | 10hrs  |
+| [flan-alpaca-lora-xxl](https://huggingface.co/reasonwang/flan-alpaca-lora-xxl) | 9.4M           | 3090 | 10hrs  |
 
 #### Dependcies
 
