@@ -1,6 +1,8 @@
+import os
 from dataclasses import field, dataclass
 from typing import Optional, Any
 
+import torch
 import transformers
 from transformers import Trainer
 
@@ -52,7 +54,24 @@ def train():
         use_fast=False
     )
 
-    model = transformers.AutoModelForSeq2SeqLM.from_pretrained(model_args.model_name_or_path, cache_dir=training_args.cache_dir)
+    device_map = "auto"
+
+    if model_args.model_name_or_path == "google/flan-t5-xxl":
+        load_in_8bit = True
+    else:
+        load_in_8bit = False
+
+    model = transformers.AutoModelForSeq2SeqLM.from_pretrained(
+        model_args.model_name_or_path,
+        load_in_8bit=load_in_8bit,
+        use_cache=False,
+        torch_dtype=torch.float16,
+        cache_dir=training_args.cache_dir,
+        device_map=device_map,
+    )
+
+    if load_in_8bit:
+        model = prepare_model_for_int8_training(model)
 
     config = LoraConfig(
         r=training_args.lora_r,
@@ -64,12 +83,6 @@ def train():
     )
     model = get_peft_model(model, config)
     model.print_trainable_parameters()
-    old_state_dict = model.state_dict
-    model.state_dict = (
-        lambda self, *_, **__: get_peft_model_state_dict(
-            self, old_state_dict()
-        )
-    ).__get__(model, type(model))
 
     dataset = Seq2SeqDataset(data_path=data_args.data_path)
     collator = Seq2SeqCollator(tokenizer=tokenizer)
