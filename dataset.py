@@ -28,11 +28,14 @@ PROMPT_DICT = {
 
 
 class Seq2SeqDataset(Dataset):
-    def __init__(self, data_path):
+    def __init__(self, data_paths):
         super(Seq2SeqDataset, self).__init__()
-        logging.warning("Loading data...")
-        with open(data_path, "r") as f:
-            list_data_dict = json.load(f)
+
+        list_data_dict = []
+        for data_path in data_paths:
+            logging.warning(f"Loading data from {data_path}...")
+            with open(data_path, "r") as f:
+                list_data_dict.extend(json.load(f))
 
         prompt_input, prompt_no_input = PROMPT_DICT["prompt_input"], PROMPT_DICT["prompt_no_input"]
 

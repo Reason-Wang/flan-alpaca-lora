@@ -17,10 +17,11 @@ from peft import (
 )
 from typing import List
 
+
 @dataclass
 class TrainingArguments(transformers.TrainingArguments):
     model_name_or_path: Optional[str] = field(default="google/flan-t5-base")
-    data_path: str = field(default="./alpaca_data.json", metadata={"help": "Path to the training data."})
+    data_paths: List[str] = field(default_factory=lambda: ["./alpaca_data.json"], metadata={"help": "Path to the training data."})
     instruction_length: int = 40
     output_length: int = 160
     cache_dir: Optional[str] = field(default=None)
@@ -78,7 +79,7 @@ def train():
     model = get_peft_model(model, config)
     model.print_trainable_parameters()
 
-    dataset = Seq2SeqDataset(args.data_path)
+    dataset = Seq2SeqDataset(args.data_paths)
     collator = Seq2SeqCollator(tokenizer, args.instruction_length, args.output_length)
 
     trainer = Trainer(

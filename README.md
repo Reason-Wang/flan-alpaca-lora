@@ -2,6 +2,8 @@
 
 This repo trains *google/flan-t5* on alpaca dataset with low-rank adaptation training method. It reduces the GPU memory needed and speeds the training.
 
+Update: we trained flan-t5-xl using GPTeacher dataset (Instruct and Roleplay), which seems to perform well.
+
 Update: we trained flan-t5-xxl using 8bit quantization. The model can be fitted into a single 3090 GPU. All of the models can be found in huggingface.
 
 | model                                                        | adapter_params | GPU  | time   |
@@ -10,6 +12,7 @@ Update: we trained flan-t5-xxl using 8bit quantization. The model can be fitted 
 | [flan-alpaca-lora-large](https://huggingface.co/reasonwang/flan-alpaca-lora-large) | 2.4M           | 3090 | 50mins |
 | [flan-alpaca-lora-xl](https://huggingface.co/reasonwang/flan-alpaca-lora-xl) | 4.7M           | 3090 | 2.5hrs |
 | [flan-alpaca-lora-xxl](https://huggingface.co/reasonwang/flan-alpaca-lora-xxl) | 9.4M           | 3090 | 10hrs  |
+| [flan-gpteacher-lora-xl](https://huggingface.co/reasonwang/flan-gpteacher-lora-xl) | 4.7M           | 3090 | 80mins |
 
 #### Dependcies
 
