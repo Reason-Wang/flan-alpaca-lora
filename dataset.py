@@ -41,7 +41,7 @@ class Seq2SeqDataset(Dataset):
             prompt_input.format_map(example) if example.get("input", "") != "" else prompt_no_input.format_map(example)
             for example in list_data_dict
         ]
-        targets = [f"{example['output']}" for example in list_data_dict]
+        targets = [f"{example['output']}" if 'output' in example else f"{example['response']}" for example in list_data_dict]
 
         self.sources = sources
         self.targets = targets
@@ -54,8 +54,10 @@ class Seq2SeqDataset(Dataset):
 
 
 class Seq2SeqCollator(object):
-    def __init__(self, tokenizer):
+    def __init__(self, tokenizer, intruction_length=40, output_length=160):
         self.tokenizer = tokenizer
+        self.intruction_length = intruction_length
+        self.output_length = output_length
 
     def __call__(self, batch):
         sources = [ex[0] for ex in batch]
@@ -63,7 +65,7 @@ class Seq2SeqCollator(object):
 
         inputs = self.tokenizer(
             sources,
-            max_length=40,
+            max_length=self.intruction_length,
             return_tensors='pt',
             padding=True,
             truncation=True
@@ -71,7 +73,7 @@ class Seq2SeqCollator(object):
 
         labels = self.tokenizer(
             targets,
-            max_length=160,
+            max_length=self.output_length,
             return_tensors='pt',
             padding=True,
             truncation=True

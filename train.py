@@ -18,17 +18,11 @@ from peft import (
 from typing import List
 
 @dataclass
-class ModelArguments:
-    model_name_or_path: Optional[str] = field(default="google/flan-t5-base")
-
-
-@dataclass
-class DataArguments:
-    data_path: str = field(default="./alpaca_data.json", metadata={"help": "Path to the training data."})
-
-
-@dataclass
 class TrainingArguments(transformers.TrainingArguments):
+    model_name_or_path: Optional[str] = field(default="google/flan-t5-base")
+    data_path: str = field(default="./alpaca_data.json", metadata={"help": "Path to the training data."})
+    instruction_length: int = 40
+    output_length: int = 160
     cache_dir: Optional[str] = field(default=None)
     optim: str = field(default="adamw_torch")
     model_max_length: int = field(
@@ -43,30 +37,30 @@ class TrainingArguments(transformers.TrainingArguments):
 
 
 def train():
-    parser = transformers.HfArgumentParser((ModelArguments, DataArguments, TrainingArguments))
-    model_args, data_args, training_args = parser.parse_args_into_dataclasses()
+    parser = transformers.HfArgumentParser(TrainingArguments)
+    args = parser.parse_args_into_dataclasses()[0]
 
     tokenizer = transformers.AutoTokenizer.from_pretrained(
-        model_args.model_name_or_path,
-        cache_dir=training_args.cache_dir,
-        model_max_length=training_args.model_max_length,
+        args.model_name_or_path,
+        cache_dir=args.cache_dir,
+        model_max_length=args.model_max_length,
         padding_side="right",
         use_fast=False
     )
 
     device_map = "auto"
 
-    if model_args.model_name_or_path == "google/flan-t5-xxl":
+    if args.model_name_or_path == "google/flan-t5-xxl":
         load_in_8bit = True
     else:
         load_in_8bit = False
 
     model = transformers.AutoModelForSeq2SeqLM.from_pretrained(
-        model_args.model_name_or_path,
+        args.model_name_or_path,
         load_in_8bit=load_in_8bit,
         use_cache=False,
         torch_dtype=torch.float16,
-        cache_dir=training_args.cache_dir,
+        cache_dir=args.cache_dir,
         device_map=device_map,
     )
 
@@ -74,29 +68,29 @@ def train():
         model = prepare_model_for_int8_training(model)
 
     config = LoraConfig(
-        r=training_args.lora_r,
-        lora_alpha=training_args.lora_alpha,
-        target_modules=training_args.lora_target_modules,
-        lora_dropout=training_args.lora_dropout,
+        r=args.lora_r,
+        lora_alpha=args.lora_alpha,
+        target_modules=args.lora_target_modules,
+        lora_dropout=args.lora_dropout,
         bias="none",
         task_type="SEQ_2_SEQ_LM",
     )
     model = get_peft_model(model, config)
     model.print_trainable_parameters()
 
-    dataset = Seq2SeqDataset(data_path=data_args.data_path)
-    collator = Seq2SeqCollator(tokenizer=tokenizer)
+    dataset = Seq2SeqDataset(args.data_path)
+    collator = Seq2SeqCollator(tokenizer, args.instruction_length, args.output_length)
 
     trainer = Trainer(
         model,
-        args=training_args,
+        args=args,
         data_collator=collator,
         train_dataset=dataset,
     )
 
     trainer.train()
 
-    model.save_pretrained(training_args.output_dir)
+    model.save_pretrained(args.output_dir)
 
 
 if __name__ == "__main__":
