@@ -2,17 +2,20 @@
 
 This repo trains *google/flan-t5* on alpaca dataset with low-rank adaptation training method. It reduces the GPU memory needed and speeds the training.
 
-Apr 13, 2023: we trained flan-t5-xl using GPTeacher dataset (Instruct and Roleplay), which seems to perform well.
+May 3, 2023: train flan-t5-xl using alpaca-gpt4 dataset.
 
-Apr 5, 2023: we trained flan-t5-xxl using 8bit quantization. The model can be fitted into a single 3090 GPU. All of the models can be found in huggingface.
+Apr 13, 2023: train flan-t5-xl using GPTeacher dataset (Instruct and Roleplay), which seems to perform well.
 
-| model                                                        | adapter_params | GPU  | time   |
-| ------------------------------------------------------------ | -------------- | ---- | ------ |
-| [flan-alpaca-lora-base](https://huggingface.co/reasonwang/flan-alpaca-lora-base) | 0.9M           | 3090 | 20mins |
-| [flan-alpaca-lora-large](https://huggingface.co/reasonwang/flan-alpaca-lora-large) | 2.4M           | 3090 | 50mins |
-| [flan-alpaca-lora-xl](https://huggingface.co/reasonwang/flan-alpaca-lora-xl) | 4.7M           | 3090 | 2.5hrs |
-| [flan-alpaca-lora-xxl](https://huggingface.co/reasonwang/flan-alpaca-lora-xxl) | 9.4M           | 3090 | 10hrs  |
-| [flan-gpteacher-lora-xl](https://huggingface.co/reasonwang/flan-gpteacher-lora-xl) | 4.7M           | 3090 | 80mins |
+Apr 5, 2023: train flan-t5-xxl using 8bit quantization. The model can be fitted into a single 3090 GPU. All of the models can be found in huggingface.
+
+| model                                                        | adapter_params | data                                                         | GPU  | time   |
+| ------------------------------------------------------------ | -------------- | ------------------------------------------------------------ | ---- | ------ |
+| [flan-alpaca-lora-base](https://huggingface.co/reasonwang/flan-alpaca-lora-base) | 0.9M           | [alpaca cleaned](https://github.com/gururise/AlpacaDataCleaned) | 3090 | 20mins |
+| [flan-alpaca-lora-large](https://huggingface.co/reasonwang/flan-alpaca-lora-large) | 2.4M           | [alpaca cleaned](https://github.com/gururise/AlpacaDataCleaned) | 3090 | 50mins |
+| [flan-alpaca-lora-xl](https://huggingface.co/reasonwang/flan-alpaca-lora-xl) | 4.7M           | [alpaca cleaned](https://github.com/gururise/AlpacaDataCleaned) | 3090 | 2.5hrs |
+| [flan-alpaca-lora-xxl](https://huggingface.co/reasonwang/flan-alpaca-lora-xxl) | 9.4M           | [alpaca cleaned](https://github.com/gururise/AlpacaDataCleaned) | 3090 | 10hrs  |
+| [flan-gpteacher-lora-xl](https://huggingface.co/reasonwang/flan-gpteacher-lora-xl) | 4.7M           | [GPTeacher](https://github.com/teknium1/GPTeacher)           | 3090 | 80mins |
+| [flan-alpaca-gpt4-lora-xl](https://huggingface.co/reasonwang/flan-alpaca-gpt4-lora-xl) | 4.7M           | [alpaca-gpt4](https://github.com/Instruction-Tuning-with-GPT-4/GPT-4-LLM) | 3090 | 80mins |
 
 #### Dependcies
 
