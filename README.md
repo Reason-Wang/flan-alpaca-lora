@@ -17,13 +17,17 @@ Apr 5, 2023: train flan-t5-xxl using 8bit quantization. The model can be fitted 
 | [flan-gpteacher-lora-xl](https://huggingface.co/reasonwang/flan-gpteacher-lora-xl) | 4.7M           | [GPTeacher](https://github.com/teknium1/GPTeacher)           | 3090 | 80mins  |
 | [flan-alpaca-gpt4-lora-xl](https://huggingface.co/reasonwang/flan-alpaca-gpt4-lora-xl) | 4.7M           | [alpaca-gpt4](https://github.com/Instruction-Tuning-with-GPT-4/GPT-4-LLM) | 3090 | 3.25hrs |
 
-#### Dependcies
+#### Dependencies
 
 ```
 torch == 1.13.1
-transformers == 4.27.3
-peft == 0.2.0
+transformers == 4.29.1
+peft == 0.3.0
+bitsandbytes==0.38.1
+accelerate==0.19.0
 ```
+
+Newest version of these packages should work fine.
 
 #### Training
 
