@@ -88,8 +88,7 @@ class Seq2SeqCollator(object):
 
 
 if __name__=="__main__":
-    tokz = transformers.AutoTokenizer.from_pretrained("google/flan-t5-base")
-    dataset = Seq2SeqDataset("./alpaca_data.json")
+    dataset = Seq2SeqDataset(["./alpaca_data.json"])
     print(dataset[0])
 
 

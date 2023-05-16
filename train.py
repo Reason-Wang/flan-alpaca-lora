@@ -16,7 +16,8 @@ from peft import (
     set_peft_model_state_dict,
 )
 from typing import List
-
+import logging
+logging.basicConfig(level=logging.INFO)
 
 @dataclass
 class TrainingArguments(transformers.TrainingArguments):
@@ -26,6 +27,7 @@ class TrainingArguments(transformers.TrainingArguments):
     output_length: int = 160
     cache_dir: Optional[str] = field(default=None)
     optim: str = field(default="adamw_torch")
+    load_in_8bit: bool = field(default=True)
     model_max_length: int = field(
         default=512,
         metadata={"help": "Maximum sequence length. Sequences will be right padded (and possibly truncated)."},
@@ -51,21 +53,21 @@ def train():
 
     device_map = "auto"
 
-    if args.model_name_or_path == "google/flan-t5-xxl":
-        load_in_8bit = True
-    else:
-        load_in_8bit = False
+    if args.model_name_or_path == "google/flan-t5-xxl" and args.load_in_8bit == False:
+        logging.info("You are training flan-t5-xxl with float32 data type. "
+                     "To save the memory, you may set load_in_8bit to True.")
+
 
     model = transformers.AutoModelForSeq2SeqLM.from_pretrained(
         args.model_name_or_path,
-        load_in_8bit=load_in_8bit,
+        load_in_8bit=args.load_in_8bit,
         use_cache=False,
         torch_dtype=torch.float16,
         cache_dir=args.cache_dir,
         device_map=device_map,
     )
 
-    if load_in_8bit:
+    if args.load_in_8bit:
         model = prepare_model_for_int8_training(model)
 
     config = LoraConfig(
