@@ -2,6 +2,10 @@
 
 This repo trains *google/flan-t5* on alpaca dataset with low-rank adaptation training method. It reduces the GPU memory needed and speeds the training.
 
+Jun 17, 2023: add a notebook. You can try flan-alpaca-lora with <a target="_blank" href="https://colab.research.google.com/github/Reason-Wang/flan-alpaca-lora/blob/main/flan_alpaca_lora.ipynb">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+</a> now.
+
 May 3, 2023: train flan-t5-xl using alpaca-gpt4 dataset.
 
 Apr 13, 2023: train flan-t5-xl using GPTeacher dataset (Instruct and Roleplay), which seems to perform well.
